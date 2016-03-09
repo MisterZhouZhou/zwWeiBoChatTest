@@ -1,0 +1,124 @@
+//
+//  ZWPrefixHeader.pch
+//  ZW微博
+//
+//  Created by rayootech on 15/11/1.
+//  Copyright © 2015年 rayootech. All rights reserved.
+//
+
+#import "UIView+Extension.h"
+#import "UIBarButtonItem+ZWExtension.h"
+#import "MBProgressHUD+MJ.h"
+#import "AFHTTPRequestOperationManager.h"
+#import "UIWindow+Extension.h"
+#import "UIImage+ZWImage.h"
+#import "UIView+ZWCommon.h"
+#import "UIImageView+WebCache.h"
+#import "UIColor+expanded.h"
+#import "NSObject+MJKeyValue.h"
+#import "NSString+Emoji.h"
+#import "ZWConst.h"
+
+#ifdef DEBUG // 处于开发阶段
+#define ZWLog(...) NSLog(__VA_ARGS__)
+#else // 处于发布阶段
+#define ZWLog(...)
+#endif
+
+#define ZWVersionKey @"version"
+
+#define ZWKeyWindow  [UIApplication sharedApplication].keyWindow
+
+#define ZWNotificationCenter [NSNotificationCenter defaultCenter]
+
+#define iOS7 ([[UIDevice currentDevice].systemVersion doubleValue]>=7.0)
+
+
+// RGB颜色
+#define ZWColor(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
+
+// 随机色
+#define ZWRandomColor ZWColor(arc4random_uniform(256), arc4random_uniform(256), arc4random_uniform(256))
+
+//屏幕frame
+#define kScreen_Bounds [UIScreen mainScreen].bounds
+#define kScreen_Height [UIScreen mainScreen].bounds.size.height
+#define kScreen_Width [UIScreen mainScreen].bounds.size.width
+
+
+//设备判断
+#define kDevice_Is_iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
+#define kDevice_Is_iPhone6 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(750, 1334), [[UIScreen mainScreen] currentMode].size) : NO)
+#define kDevice_Is_iPhone6Plus ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1242, 2208), [[UIScreen mainScreen] currentMode].size) : NO)
+
+//字体自适应
+#define  FontSize(sizefont)  [UIFont systemFontOfSize:sizefont+sizeValue([UIScreen mainScreen].bounds.size.height)]
+#define  FontNameSize(sizefont)  [UIFont fontWithName:@"Helvetica" size:sizefont+sizeValue([UIScreen mainScreen].bounds.size.height)]
+#define  FontBoldSize(sizefont)  [UIFont boldSystemFontOfSize:sizefont+sizeValue([UIScreen mainScreen].bounds.size.height)]
+#define IS_IOS7 (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1 && floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_7_1)
+#define IS_IOS8  ([[[UIDevice currentDevice] systemVersion] compare:@"8" options:NSNumericSearch] != NSOrderedAscending)
+#define IS_IPHONE6PLUS ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) && [[UIScreen mainScreen] nativeScale] == 3.0f)
+
+//系统版本
+#define IOS_VERSION_9_OR_ABOVE (([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0)? (YES):(NO))
+
+#define IOS_VERSION_7_OR_ABOVE (([[[UIDevice currentDevice] systemVersion] floatValue] <= 8.0)? (YES):(NO))
+static inline int sizeValue(float thing) {
+    if(thing<500)
+    {
+        if(IOS_VERSION_9_OR_ABOVE)
+            return  -1;
+        return 0;
+    }
+    else if (thing<600)
+    {
+        if(IOS_VERSION_9_OR_ABOVE)
+            return  -1;
+        return 0;
+        
+    }
+    else if (thing<700)
+    {
+        if(IOS_VERSION_9_OR_ABOVE)
+            return  1;
+        return 2;
+    }
+    else if (thing<800)
+    {
+        if(IOS_VERSION_9_OR_ABOVE)
+            return  2;
+        return 3;
+    }else
+    {
+        if(IOS_VERSION_9_OR_ABOVE)
+            return  -1;
+        return 0;
+    }
+}
+
+
+/*              cell               */
+
+#define ZWStatusCellMargin 10
+#define ZWNameFont [UIFont systemFontOfSize:13.0]
+#define ZWTimeFont [UIFont systemFontOfSize:12.0]
+#define ZWSourceFont ZWTimeFont
+#define ZWTextFont [UIFont systemFontOfSize:15.0]
+
+#define kKeyWindow [UIApplication sharedApplication].keyWindow
+
+///=============================================
+/// @name Weak Object
+///=============================================
+#pragma mark - Weak Object
+#define ESWeak(var, weakVar) __weak __typeof(&*var) weakVar = var
+#define ESStrong_DoNotCheckNil(weakVar, _var) __typeof(&*weakVar) _var = weakVar
+#define ESStrong(weakVar, _var) ESStrong_DoNotCheckNil(weakVar, _var); if (!_var) return;
+
+#define ESWeak_(var) ESWeak(var, weak_##var);
+#define ESStrong_(var) ESStrong(weak_##var, _##var);
+
+/** defines a weak `self` named `__weakSelf` */
+#define ESWeakSelf      ESWeak(self, __weakSelf);
+/** defines a strong `self` named `_self` from `__weakSelf` */
+#define ESStrongSelf    ESStrong(__weakSelf, _self);
