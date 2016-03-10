@@ -13,7 +13,6 @@
 
 + (MBProgressHUD *)showMessage:(NSString *)message toView:(UIView *)view;
 
-
 + (void)showSuccess:(NSString *)success;
 + (void)showError:(NSString *)error;
 

@@ -15,4 +15,5 @@
 @property (nonatomic, assign) int index;
 /** 参数类型 */
 @property (nonatomic, copy) NSString *type;
+
 @end
